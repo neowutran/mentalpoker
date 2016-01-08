@@ -13,37 +13,52 @@ public class Bob {
 
     private LinkedList<BigInteger> deck = new LinkedList<>();
     private Network network;
+    private BigInteger aliceCard;
     private Sra sra = new Sra();
 
     public Bob(String ip, int port){
         System.out.println("Begin");
-
         init();
         System.out.println("Begin Network");
         network = new Network(ip, port);
-        System.out.println("1");
+        System.out.println("Send P");
         sendP();
-        System.out.println("2");
+        System.out.println("Read Q");
         readQ();
 
-        System.out.println("3");
+        System.out.println("Sra init");
 
         //Cipher deck
-       // sra.init();
-        //cipherDeck();
+        sra.init();
+        cipherDeck();
 
-
+        System.out.println("Send deck");
         sendDeck();
+
+        System.out.println("read shuffle deck");
         readShuffleDeck();
 
         //Decipher deck
-        //decipherDeck();
+        System.out.println("decipher deck");
+        decipherDeck();
 
 
         System.out.println(deck.get(0));
+        System.out.println("Send alice card");
         sendAliceCard();
+
+        System.out.println("Alice decipher key");
+        readAliceD();
+
+        System.out.println("Send decipher key");
+        sendD();
+
         network.close();
 
+    }
+
+    private void sendD(){
+        network.write(sra.getD());
     }
 
     private void cipherDeck(){
@@ -63,7 +78,19 @@ public class Bob {
      }
 
     private void sendAliceCard(){
-        network.write(deck.get(1));
+        aliceCard = deck.get(1);
+        network.write(aliceCard);
+    }
+
+    private void readAliceD(){
+        BigInteger aliceD = (BigInteger)network.read();
+        Sra aliceSecurity = new Sra();
+        aliceSecurity.setP(sra.getP());
+        aliceSecurity.setQ(sra.getQ());
+        aliceSecurity.init();
+        aliceSecurity.setD(aliceD);
+        System.out.println(aliceSecurity.decryptCard(aliceCard));
+
     }
 
 
@@ -88,7 +115,7 @@ public class Bob {
     }
 
     private void init(){
-        deck.add(new BigInteger("0"));
+        deck.add(new BigInteger("91"));
         deck.add(new BigInteger("42"));
         deck.add(new BigInteger("39"));
         sra.generateP();

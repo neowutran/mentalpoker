@@ -20,7 +20,7 @@ public class Network {
             System.out.println("Set input stream");
             InputStream is = _alice.getInputStream();
             _read = new ObjectInputStream(is);
-            System.out.println("done");
+            System.out.println("Network initialized");
         } catch (IOException e) {
             e.printStackTrace();
         }

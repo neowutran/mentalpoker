@@ -12,7 +12,7 @@ public class Sra {
     private BigInteger e;
     private BigInteger on;
 
-    private Integer SIZE = 4;
+    private Integer SIZE = 128;
 
 
     public BigInteger getQ(){
@@ -31,6 +31,14 @@ public class Sra {
         p=generate();
     }
 
+    public BigInteger getD(){
+        return d;
+    }
+
+    public void setD(BigInteger d){
+        this.d=d;
+    }
+
     private BigInteger generate(){
         return BigInteger.probablePrime(SIZE, new SecureRandom());
     }
@@ -44,7 +52,7 @@ public class Sra {
     }
 
     public void init(){
-        on=(p.min(new BigInteger("1"))).multiply(q.min(new BigInteger("1")));
+        on=(p.subtract(new BigInteger("1"))).multiply(q.subtract(new BigInteger("1")));
         do{
             e = new BigInteger(2*SIZE, new SecureRandom());
         }while( (e.equals(on))|| (pgcd(e,on).intValue() != 1));
