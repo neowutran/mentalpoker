@@ -35,6 +35,11 @@ public class MentalPoker {
 
     }
 
+    private void CipherDeck(){
+        sra.setE();
+        sra.setON()
+    }
+
     private void sendAliceCard(){
         network.write(deck.get(1));
     }

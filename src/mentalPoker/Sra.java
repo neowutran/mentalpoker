@@ -37,32 +37,26 @@ public class Sra {
 
     public void setQ(BigInteger q){
         this.q = q;
-
     }
 
-    public void setN(){
-        n=p.multiply(q);
+    public void setP(BigInteger p){
+        this.p = p;
     }
 
-    public void setON(){
-        on=(p.min(new BigInteger("1"))).multiply(q.min(new BigInteger("1")));
-    }
-
-    public void setE(){
+    public void init(){
         do{
             e = new BigInteger(2*SIZE, new SecureRandom());
         }while( (e.equals(on))|| (pgcd(e,on).intValue() != 1));
-    }
-
-    public void setD(){
-        this.d = e.modInverse(on);
+        on=(p.min(new BigInteger("1"))).multiply(q.min(new BigInteger("1")));
+        d = e.modInverse(on);
+        n=p.multiply(q);
     }
 
     public boolean checkPrimeQ(BigInteger q){
         return q.isProbablePrime(1);
     }
 
-    public BigInteger pgcd(BigInteger x, BigInteger y){
+    private BigInteger pgcd(BigInteger x, BigInteger y){
         return x.gcd(y);
     }
 
