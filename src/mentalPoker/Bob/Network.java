@@ -12,11 +12,15 @@ public class Network {
     public Network(String aliceIp, int port){
 
         try {
+
             _alice = new Socket(aliceIp, port);
+            System.out.println("Set output stream");
             OutputStream os = _alice.getOutputStream();
             _write = new ObjectOutputStream(os);
+            System.out.println("Set input stream");
             InputStream is = _alice.getInputStream();
             _read = new ObjectInputStream(is);
+            System.out.println("done");
         } catch (IOException e) {
             e.printStackTrace();
         }

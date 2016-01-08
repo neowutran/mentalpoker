@@ -12,7 +12,7 @@ public class Sra {
     private BigInteger e;
     private BigInteger on;
 
-    private Integer SIZE = 512;
+    private Integer SIZE = 4;
 
 
     public BigInteger getQ(){
@@ -44,10 +44,10 @@ public class Sra {
     }
 
     public void init(){
+        on=(p.min(new BigInteger("1"))).multiply(q.min(new BigInteger("1")));
         do{
             e = new BigInteger(2*SIZE, new SecureRandom());
         }while( (e.equals(on))|| (pgcd(e,on).intValue() != 1));
-        on=(p.min(new BigInteger("1"))).multiply(q.min(new BigInteger("1")));
         d = e.modInverse(on);
         n=p.multiply(q);
     }

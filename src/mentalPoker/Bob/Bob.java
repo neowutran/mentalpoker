@@ -8,7 +8,7 @@ import java.util.LinkedList;
 public class Bob {
 
     public static void main(String[] args) {
-        new Bob("172.19.250.218",1025);
+        new Bob("192.168.0.1",1025);
     }
 
     private LinkedList<BigInteger> deck = new LinkedList<>();
@@ -16,13 +16,20 @@ public class Bob {
     private Sra sra = new Sra();
 
     public Bob(String ip, int port){
+        System.out.println("Begin");
+
         init();
+        System.out.println("Begin Network");
         network = new Network(ip, port);
+        System.out.println("1");
         sendP();
+        System.out.println("2");
         readQ();
 
+        System.out.println("3");
+
         //Cipher deck
-        sra.init();
+       // sra.init();
         //cipherDeck();
 
 
