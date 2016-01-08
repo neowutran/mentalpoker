@@ -1,32 +1,36 @@
-package mentalPoker;
+package mentalPoker.Bob;
+
+import mentalPoker.Sra;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
 
-public class MentalPoker {
+public class Bob {
 
     public static void main(String[] args) {
-        new MentalPoker("172.19.250.218",1025);
+        new Bob("172.19.250.218",1025);
     }
 
-    private LinkedList<Integer> deck = new LinkedList<>();
+    private LinkedList<BigInteger> deck = new LinkedList<>();
     private Network network;
     private Sra sra = new Sra();
 
-    public MentalPoker(String ip, int port){
+    public Bob(String ip, int port){
         init();
         network = new Network(ip, port);
         sendP();
         readQ();
 
         //Cipher deck
+        sra.init();
+        //cipherDeck();
 
 
         sendDeck();
         readShuffleDeck();
 
-
         //Decipher deck
+        //decipherDeck();
 
 
         System.out.println(deck.get(0));
@@ -35,10 +39,21 @@ public class MentalPoker {
 
     }
 
-    private void CipherDeck(){
-        sra.setE();
-        sra.setON()
+    private void cipherDeck(){
+        LinkedList<BigInteger> cipherDeck = new LinkedList<>();
+        for (BigInteger aDeck : deck) {
+            cipherDeck.add(sra.encryptCard(aDeck));
+        }
+        deck = cipherDeck;
     }
+
+    private void decipherDeck(){
+        LinkedList<BigInteger> plainDeck = new LinkedList<>();
+        for(BigInteger aDeck: deck){
+            plainDeck.add(sra.decryptCard(aDeck));
+        }
+        deck = plainDeck;
+     }
 
     private void sendAliceCard(){
         network.write(deck.get(1));
@@ -58,7 +73,7 @@ public class MentalPoker {
     }
 
     private void readShuffleDeck(){
-        deck = (LinkedList<Integer>)network.read();
+        deck = (LinkedList<BigInteger>)network.read();
     }
 
     private void sendDeck(){
@@ -66,9 +81,9 @@ public class MentalPoker {
     }
 
     private void init(){
-        deck.add(0);
-        deck.add(42);
-        deck.add(39);
+        deck.add(new BigInteger("0"));
+        deck.add(new BigInteger("42"));
+        deck.add(new BigInteger("39"));
         sra.generateP();
     }
 }

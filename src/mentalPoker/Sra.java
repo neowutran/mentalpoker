@@ -60,12 +60,11 @@ public class Sra {
         return x.gcd(y);
     }
 
-    private Integer decryptCard(BigInteger card){
-        return card.modPow(d,n).intValue();
+    public BigInteger decryptCard(BigInteger card){
+        return card.modPow(d,n);
     }
 
-    private BigInteger encryptCard(Integer card){
-        BigInteger bigCard = new BigInteger(card+"");
-        return bigCard.modPow (e,n);
+    public BigInteger encryptCard(BigInteger card){
+        return card.modPow (e,n);
     }
 }

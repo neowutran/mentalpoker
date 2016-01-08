@@ -1,4 +1,4 @@
-package mentalPoker;
+package mentalPoker.Bob;
 
 import java.io.*;
 import java.net.Socket;
