@@ -4,22 +4,26 @@ import mentalPoker.Card;
 import mentalPoker.Sra;
 
 import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class Bob {
 
     public static void main(String[] args) {
-        new Bob("192.168.0.1",1025);
+        new Bob("25.78.211.10",1025);
     }
 
     private LinkedList<BigInteger> deck = new LinkedList<>();
     private Network network;
     private BigInteger aliceCard;
     private Sra sra = new Sra();
+    private Boolean protect = true;
 
     public Bob(String ip, int port){
         System.out.println("Begin");
         init();
+
 
         System.out.println("Begin Network");
         network = new Network(ip, port);
@@ -31,10 +35,10 @@ public class Bob {
         System.out.println("Sra init");
 
         //Cipher deck
-       //sra.generateQ();
         sra.init();
 
         printQuadraticResidute();
+
 
         cipherDeck();
 
@@ -49,7 +53,11 @@ public class Bob {
         decipherDeck();
 
 
-        System.out.println(deck.get(0).intValue()/changeQuadraticResidute);
+        if(protect) {
+            System.out.println((int)(deck.get(0).intValue() / 100000));
+        }else{
+            System.out.println(deck.get(0));
+        }
         System.out.println("Send alice card");
         sendAliceCard();
 
@@ -60,6 +68,12 @@ public class Bob {
         sendD();
 
         network.close();
+
+    }
+
+    private Integer random(){
+        Random randomGenerator = new SecureRandom();
+        return randomGenerator.nextInt(10000);
 
     }
 
@@ -91,7 +105,7 @@ public class Bob {
      }
 
     private void sendAliceCard(){
-        aliceCard = deck.get(1).divide(new BigInteger("8"));
+        aliceCard = deck.get(1);
         network.write(aliceCard);
     }
 
@@ -128,11 +142,21 @@ public class Bob {
     }
 
     private void init(){
-        deck.add(new BigInteger(Card.ACE.values*changeQuadraticResidute+""));
-        deck.add(new BigInteger(Card.DEUX.values*changeQuadraticResidute+""));
-        deck.add(new BigInteger(Card.SIX.values*changeQuadraticResidute+""));
+        if(protect) {
+            int ace = Card.ACE.values * 100000 + random();
+            int deux = Card.DEUX.values * 100000 + random();
+            int six = Card.SIX.values * 100000 + random();
+            deck.add(new BigInteger(ace + ""));
+            deck.add(new BigInteger(deux + ""));
+            deck.add(new BigInteger(six + ""));
+        }else{
+            deck.add(new BigInteger(Card.ACE.values+ ""));
+            deck.add(new BigInteger(Card.DEUX.values + ""));
+            deck.add(new BigInteger(Card.SIX.values + ""));
+        }
+        for (BigInteger aDeck : deck) {
+            System.out.println(aDeck);
+        }
         sra.generateP();
     }
-
-    private static Integer changeQuadraticResidute = 8;
 }
