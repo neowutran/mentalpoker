@@ -1,13 +1,13 @@
 package mentalPoker;
 
-/**
- * Created by yukikoo on 1/8/16.
- */
 public enum Card {
+    ACE (1),
+    DEUX (2),
+    SIX (3);
 
-    AS,
-    One,
-    BlaBla,
-
-
+    public Integer values;   // in kilograms
+    Card(Integer values) {
+        this.values = values;
+    }
+    private Integer valeur() { return values; }
 }

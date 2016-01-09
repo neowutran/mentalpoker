@@ -2,6 +2,7 @@ package mentalPoker;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.LinkedList;
 
 public class Sra {
 
@@ -58,6 +59,31 @@ public class Sra {
         }while( (e.equals(on))|| (pgcd(e,on).intValue() != 1));
         d = e.modInverse(on);
         n=p.multiply(q);
+    }
+
+    public Integer cheatQuadraticResidue(LinkedList<BigInteger> deck){
+        //ACE=1, QR de 8 et DEUX et SIX QNR de 8
+        //if cardEnc est QR de 8 => ACE
+        Integer i;
+        for (i = 0; i < deck.size(); i++){
+            if(isQR(deck.get(i), BigInteger.valueOf(8))){
+                break;
+            }
+        }
+        return i;
+    }
+
+    public boolean isQR(BigInteger card, BigInteger n){
+        if (card.gcd(n).equals(BigInteger.valueOf(1))){
+            BigInteger x=BigInteger.valueOf(1);
+            for (int i=1; i<n.intValue();i++){
+                if((x.modPow(BigInteger.valueOf(2),n).compareTo(card.mod(n)))==0){
+                    return true;
+                }
+                x = x.add(BigInteger.valueOf(1));
+            }
+        }
+        return false;
     }
 
     public boolean checkPrimeQ(BigInteger q){

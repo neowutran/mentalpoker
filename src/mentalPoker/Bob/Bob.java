@@ -1,5 +1,6 @@
 package mentalPoker.Bob;
 
+import mentalPoker.Card;
 import mentalPoker.Sra;
 
 import java.math.BigInteger;
@@ -19,6 +20,7 @@ public class Bob {
     public Bob(String ip, int port){
         System.out.println("Begin");
         init();
+
         System.out.println("Begin Network");
         network = new Network(ip, port);
         System.out.println("Send P");
@@ -29,7 +31,11 @@ public class Bob {
         System.out.println("Sra init");
 
         //Cipher deck
+       //sra.generateQ();
         sra.init();
+
+        printQuadraticResidute();
+
         cipherDeck();
 
         System.out.println("Send deck");
@@ -43,7 +49,7 @@ public class Bob {
         decipherDeck();
 
 
-        System.out.println(deck.get(0));
+        System.out.println(deck.get(0).intValue()/changeQuadraticResidute);
         System.out.println("Send alice card");
         sendAliceCard();
 
@@ -55,6 +61,13 @@ public class Bob {
 
         network.close();
 
+    }
+
+    private void printQuadraticResidute(){
+        for (BigInteger aDeck : deck) {
+            Boolean isQR = sra.isQR(aDeck, new BigInteger("8"));
+            System.out.println("Card: " + aDeck + "IsQR:" + isQR);
+        }
     }
 
     private void sendD(){
@@ -78,7 +91,7 @@ public class Bob {
      }
 
     private void sendAliceCard(){
-        aliceCard = deck.get(1);
+        aliceCard = deck.get(1).divide(new BigInteger("8"));
         network.write(aliceCard);
     }
 
@@ -115,9 +128,11 @@ public class Bob {
     }
 
     private void init(){
-        deck.add(new BigInteger("91"));
-        deck.add(new BigInteger("42"));
-        deck.add(new BigInteger("39"));
+        deck.add(new BigInteger(Card.ACE.values*changeQuadraticResidute+""));
+        deck.add(new BigInteger(Card.DEUX.values*changeQuadraticResidute+""));
+        deck.add(new BigInteger(Card.SIX.values*changeQuadraticResidute+""));
         sra.generateP();
     }
+
+    private static Integer changeQuadraticResidute = 8;
 }
